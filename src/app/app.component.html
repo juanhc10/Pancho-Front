@@ -1,0 +1,49 @@
+<h1>Prueba mínima API Cuidando a Pancho</h1>
+
+<section>
+  <h2>Cuidadores</h2>
+  <button type="button" (click)="cargarCuidadores()">Cargar cuidadores</button>
+
+  <ul>
+    @for (cuidador of cuidadores(); track cuidador.nombre) {
+      <li>
+        {{ cuidador.nombre }} | {{ cuidador.idioma }} |
+        Puntos: {{ cuidador.panchoPuntos }} |
+        Exótica: {{ cuidador.puedeCuidarExotica ? 'Sí' : 'No' }}
+      </li>
+    } @empty {
+      <li>No hay cuidadores cargados.</li>
+    }
+  </ul>
+</section>
+
+<section>
+  <h2>Usuarios</h2>
+  <button type="button" (click)="cargarUsuarios()">Cargar usuarios</button>
+  <ul>
+    @for (usuario of usuarios(); track usuario.id) {
+      <li>
+        {{ usuario.nombre }} | {{ usuario.idioma }}
+      </li>
+    } @empty {
+      <li>No hay usuarios cargados.</li>
+    }
+  </ul>
+</section>
+
+<section>
+  <h3>Registrar usuario</h3>
+  <form (ngSubmit)="registrarUsuario()">
+    <input name="nombre" [(ngModel)]="nuevoUsuario.nombre" placeholder="Nombre" required>
+    <input name="contrasenia" [(ngModel)]="nuevoUsuario.contrasenia" placeholder="Contraseña" type="password" required>
+    <input name="idioma" [(ngModel)]="nuevoUsuario.idioma" placeholder="Idioma (ej: ESPANIOL)" required>
+    <input name="tipoUsuario" [(ngModel)]="nuevoUsuario.tipoUsuario" placeholder="Tipo (duenio/cuidador)" required>
+    <button type="submit">Registrar</button>
+  </form>
+
+  @if (usuarioCreado()) {
+    <div>
+      Usuario creado con éxito: <strong>{{ usuarioCreado()?.nombre }}</strong> (ID: {{ usuarioCreado()?.id }})
+    </div>
+  }
+</section>
