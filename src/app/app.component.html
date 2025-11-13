@@ -1,49 +1,119 @@
-<h1>Prueba mínima API Cuidando a Pancho</h1>
+<mat-toolbar color="primary">
+  <span>🐾 Cuidando a Pancho</span>
+  <span class="spacer"></span>
+  <button mat-icon-button aria-label="Menu icon">
+    <mat-icon>pets</mat-icon>
+  </button>
+</mat-toolbar>
 
-<section>
-  <h2>Cuidadores</h2>
-  <button type="button" (click)="cargarCuidadores()">Cargar cuidadores</button>
+<div class="container">
 
-  <ul>
-    @for (cuidador of cuidadores(); track cuidador.nombre) {
-      <li>
-        {{ cuidador.nombre }} | {{ cuidador.idioma }} |
-        Puntos: {{ cuidador.panchoPuntos }} |
-        Exótica: {{ cuidador.puedeCuidarExotica ? 'Sí' : 'No' }}
-      </li>
-    } @empty {
-      <li>No hay cuidadores cargados.</li>
-    }
-  </ul>
-</section>
-
-<section>
-  <h2>Usuarios</h2>
-  <button type="button" (click)="cargarUsuarios()">Cargar usuarios</button>
-  <ul>
-    @for (usuario of usuarios(); track usuario.id) {
-      <li>
-        {{ usuario.nombre }} | {{ usuario.idioma }}
-      </li>
-    } @empty {
-      <li>No hay usuarios cargados.</li>
-    }
-  </ul>
-</section>
-
-<section>
-  <h3>Registrar usuario</h3>
-  <form (ngSubmit)="registrarUsuario()">
-    <input name="nombre" [(ngModel)]="nuevoUsuario.nombre" placeholder="Nombre" required>
-    <input name="contrasenia" [(ngModel)]="nuevoUsuario.contrasenia" placeholder="Contraseña" type="password" required>
-    <input name="idioma" [(ngModel)]="nuevoUsuario.idioma" placeholder="Idioma (ej: ESPANIOL)" required>
-    <input name="tipoUsuario" [(ngModel)]="nuevoUsuario.tipoUsuario" placeholder="Tipo (duenio/cuidador)" required>
-    <button type="submit">Registrar</button>
-  </form>
-
-  @if (usuarioCreado()) {
-    <div>
-      Usuario creado con éxito: <strong>{{ usuarioCreado()?.nombre }}</strong> (ID: {{ usuarioCreado()?.id }})
+  <section class="section-block">
+    <div class="header-actions">
+      <h2><mat-icon>diversity_1</mat-icon> Cuidadores Disponibles</h2>
+      <button mat-raised-button color="accent" (click)="cargarCuidadores()">
+        <mat-icon>refresh</mat-icon> Cargar Cuidadores
+      </button>
     </div>
-  }
-</section>
+
+    <div class="card-grid">
+      @for (cuidador of cuidadores(); track cuidador.nombre) {
+        <mat-card class="user-card">
+          <mat-card-header>
+            <div mat-card-avatar class="avatar-placeholder">{{cuidador.nombre.charAt(0)}}</div>
+            <mat-card-title>{{ cuidador.nombre }}</mat-card-title>
+            <mat-card-subtitle>Idioma: {{ formatLanguage(cuidador.idioma) }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p><strong>PanchoPuntos:</strong> {{ cuidador.panchoPuntos }} ⭐</p>
+            <p><strong>¿Cuida Exóticas?:</strong>
+              @if(cuidador.puedeCuidarExotica) {
+                <span class="badge success">SÍ</span>
+              } @else {
+                <span class="badge info">NO</span>
+              }
+            </p>
+          </mat-card-content>
+        </mat-card>
+      } @empty {
+        <div class="empty-state">No hay cuidadores cargados. Pulsa el botón.</div>
+      }
+    </div>
+  </section>
+
+  <mat-divider></mat-divider>
+
+  <section class="section-block">
+    <div class="header-actions">
+      <h2><mat-icon>group</mat-icon> Lista de Usuarios</h2>
+      <button mat-stroked-button (click)="cargarUsuarios()">
+        <mat-icon>download</mat-icon> Actualizar Lista
+      </button>
+    </div>
+
+    <div class="card-grid">
+      @for (usuario of usuarios(); track usuario.id) {
+        <mat-card class="mini-card">
+          <mat-card-header class="mini-header">
+            <mat-icon mat-card-avatar color="primary">person</mat-icon>
+            <mat-card-title>{{ usuario.nombre }}</mat-card-title>
+            <mat-card-subtitle>Idioma: {{ formatLanguage(usuario.idioma) }}</mat-card-subtitle>
+          </mat-card-header>
+        </mat-card>
+      } @empty {
+        <div class="empty-state">No hay usuarios visibles.</div>
+      }
+    </div>
+  </section>
+
+  <mat-divider></mat-divider>
+
+  <section class="section-block form-section">
+    <h2><mat-icon>person_add</mat-icon> Nuevo Registro</h2>
+
+    <mat-card class="form-card">
+      <mat-card-content>
+        <form (ngSubmit)="registrarUsuario()" class="registro-form">
+
+          <mat-form-field appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input matInput name="nombre" [(ngModel)]="nuevoUsuario.nombre" required>
+            <mat-icon matSuffix>badge</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Contraseña</mat-label>
+            <input matInput [type]="'password'" name="contrasenia" [(ngModel)]="nuevoUsuario.contrasenia" required>
+            <mat-icon matSuffix>lock</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Idioma</mat-label>
+            <mat-select name="idioma" [(ngModel)]="nuevoUsuario.idioma" required>
+              @for (idioma of idiomasDisponibles; track idioma) {
+                <mat-option [value]="idioma.toUpperCase()">{{idioma}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Tipo Usuario</mat-label>
+            <mat-select name="tipoUsuario" [(ngModel)]="nuevoUsuario.tipoUsuario" required>
+              @for (tipo of tiposUsuario; track tipo) {
+                <mat-option [value]="tipo">{{tipo | titlecase}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="form-actions">
+            <button mat-flat-button color="primary" type="submit" [disabled]="!nuevoUsuario.nombre">
+              Registrar Usuario
+            </button>
+          </div>
+
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </section>
+
+</div>
