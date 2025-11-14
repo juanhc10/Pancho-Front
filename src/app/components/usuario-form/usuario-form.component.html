@@ -1,0 +1,51 @@
+<section class="section-block form-section">
+  <h2><mat-icon>person_add</mat-icon> Nuevo Registro</h2>
+
+  <mat-card class="form-card">
+    <mat-card-content>
+      <form (ngSubmit)="onSubmit()" class="registro-form" #f="ngForm">
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input matInput name="nombre" [(ngModel)]="model.nombre" required />
+          <mat-icon matSuffix>badge</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Contraseña</mat-label>
+          <input matInput type="password" name="contrasenia" [(ngModel)]="model.contrasenia" required />
+          <mat-icon matSuffix>lock</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Idioma</mat-label>
+          <mat-select name="idioma" [(ngModel)]="model.idioma">
+            @for(idioma of idiomasDisponibles; track idioma){
+            <mat-option>
+              {{ idioma }}
+            </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Tipo Usuario</mat-label>
+          <mat-select name="tipoUsuario" [(ngModel)]="model.tipoUsuario">
+            @for(tipo of tiposUsuario; track tipo){
+            <mat-option>
+              {{ tipo }}
+            </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button mat-flat-button color="primary" type="submit" [disabled]="!model.nombre || !model.contrasenia">
+            <mat-icon>add</mat-icon> Registrar Usuario
+          </button>
+        </div>
+
+      </form>
+    </mat-card-content>
+  </mat-card>
+</section>

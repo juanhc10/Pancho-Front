@@ -1,0 +1,22 @@
+<section class="section-block">
+  <div class="header-actions">
+    <h2><mat-icon>group</mat-icon> Lista de Usuarios</h2>
+    <button mat-raised-button (click)="refresh.emit()">
+      <mat-icon>download</mat-icon> Actualizar Lista
+    </button>
+  </div>
+
+  <div class="card-grid">
+    @for(usuario of usuarios; track usuario.id){
+    <mat-card class="mini-card">
+      <mat-card-header class="mini-header">
+        <mat-icon mat-card-avatar color="primary">person</mat-icon>
+        <mat-card-title>{{ usuario.nombre }}</mat-card-title>
+        <mat-card-subtitle>Idioma: {{ formatLanguageId(usuario.idioma) }}</mat-card-subtitle>
+      </mat-card-header>
+    </mat-card>
+    }@empty{
+    <div class="empty-state">No hay usuarios visibles. Actualiza la lista</div>
+    }
+  </div>
+</section>

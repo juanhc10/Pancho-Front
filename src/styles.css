@@ -189,3 +189,6 @@ mat-toolbar span {
   border-radius: 8px;
   font-style: italic;
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

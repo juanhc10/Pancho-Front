@@ -1,0 +1,32 @@
+<section class="section-block">
+  <div class="header-actions">
+    <h2><mat-icon>diversity_1</mat-icon> Cuidadores Disponibles</h2>
+    <button mat-raised-button color="accent" (click)="refresh.emit()">
+      <mat-icon>refresh</mat-icon> Cargar Cuidadores
+    </button>
+  </div>
+
+  <div class="card-grid">
+    @for(cuidador of cuidadores; track cuidador.nombre){
+    <mat-card class="user-card">
+        <mat-card-header>
+          <div mat-card-avatar class="avatar-placeholder">{{ cuidador.nombre.charAt(0) }}</div>
+          <mat-card-title>{{ cuidador.nombre }}</mat-card-title>
+          <mat-card-subtitle>Idioma: {{ formatLanguageId(cuidador.idioma) }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p><strong>PanchoPuntos:</strong> {{ cuidador.panchoPuntos }} ⭐</p>
+          <p><strong>¿Cuida Exóticas?:</strong>
+            @if(cuidador.puedeCuidarExotica) {
+                <span class="badge success">SÍ</span>
+              } @else {
+                <span class="badge info">NO</span>
+              }
+          </p>
+        </mat-card-content>
+      </mat-card>
+    }@empty{
+      <div class="empty-state">No hay cuidadores cargados. Pulsa el botón.</div>
+    }
+  </div>
+</section>

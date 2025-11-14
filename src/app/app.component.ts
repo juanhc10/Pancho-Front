@@ -3,9 +3,6 @@ import {FormsModule} from '@angular/forms';
 import {CuidadorDto, CuidadorService} from './services/cuidador.service';
 import {UsuarioRegistro, UsuarioResponse, UsuarioService} from './services/usuario.service';
 import {CommonModule} from '@angular/common';
-
-// --- MATERIAL IMPORTS ---
-// (Mantener los imports de Material)
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import {MatInputModule} from '@angular/material/input';
@@ -15,6 +12,11 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatSelectModule} from '@angular/material/select';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatDividerModule} from '@angular/material/divider';
+
+import { HeaderComponent } from './components/header/header.component';
+import { CuidadoresComponent } from './components/cuidadores/cuidadores.component';
+import { UsuariosListComponent } from './components/usuarios-list/usuarios-list.component';
+import { UsuarioFormComponent } from './components/usuario-form/usuario-form.component';
 
 @Component({
   selector: 'app-root',
@@ -30,7 +32,11 @@ import {MatDividerModule} from '@angular/material/divider';
     MatIconModule,
     MatSelectModule,
     MatSnackBarModule,
-    MatDividerModule
+    MatDividerModule,
+    HeaderComponent,
+    CuidadoresComponent,
+    UsuariosListComponent,
+    UsuarioFormComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: '../styles.css'
@@ -83,15 +89,13 @@ export class AppComponent implements OnInit {
     });
   }
 
-  registrarUsuario() {
-    if (!this.nuevoUsuario.nombre || !this.nuevoUsuario.contrasenia) return;
+  registrarUsuarioFromChild(user: UsuarioRegistro) {
+    if (!user.nombre || !user.contrasenia) return;
 
-    this.usuarioService.registrarUsuario(this.nuevoUsuario).subscribe({
+    this.usuarioService.registrarUsuario(user).subscribe({
       next: (data) => {
         this.snackBar.open(`¡Usuario ${data.nombre} creado!`, 'Cerrar', {duration: 3000});
-
         this.cargarUsuarios();
-        this.nuevoUsuario = {nombre: '', contrasenia: '', idioma: '', tipoUsuario: ''};
       },
       error: (e) => this.mostrarError('Error al registrar usuario')
     });

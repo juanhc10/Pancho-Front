@@ -1,119 +1,21 @@
-<mat-toolbar color="primary">
-  <span>🐾 Cuidando a Pancho</span>
-  <span class="spacer"></span>
-  <button mat-icon-button aria-label="Menu icon">
-    <mat-icon>pets</mat-icon>
-  </button>
-</mat-toolbar>
+<app-header></app-header>
 
 <div class="container">
 
-  <section class="section-block">
-    <div class="header-actions">
-      <h2><mat-icon>diversity_1</mat-icon> Cuidadores Disponibles</h2>
-      <button mat-raised-button color="accent" (click)="cargarCuidadores()">
-        <mat-icon>refresh</mat-icon> Cargar Cuidadores
-      </button>
-    </div>
-
-    <div class="card-grid">
-      @for (cuidador of cuidadores(); track cuidador.nombre) {
-        <mat-card class="user-card">
-          <mat-card-header>
-            <div mat-card-avatar class="avatar-placeholder">{{cuidador.nombre.charAt(0)}}</div>
-            <mat-card-title>{{ cuidador.nombre }}</mat-card-title>
-            <mat-card-subtitle>Idioma: {{ formatLanguage(cuidador.idioma) }}</mat-card-subtitle>
-          </mat-card-header>
-          <mat-card-content>
-            <p><strong>PanchoPuntos:</strong> {{ cuidador.panchoPuntos }} ⭐</p>
-            <p><strong>¿Cuida Exóticas?:</strong>
-              @if(cuidador.puedeCuidarExotica) {
-                <span class="badge success">SÍ</span>
-              } @else {
-                <span class="badge info">NO</span>
-              }
-            </p>
-          </mat-card-content>
-        </mat-card>
-      } @empty {
-        <div class="empty-state">No hay cuidadores cargados. Pulsa el botón.</div>
-      }
-    </div>
-  </section>
+  <app-cuidadores
+    [cuidadores]="cuidadores()"
+    (refresh)="cargarCuidadores()">
+  </app-cuidadores>
 
   <mat-divider></mat-divider>
 
-  <section class="section-block">
-    <div class="header-actions">
-      <h2><mat-icon>group</mat-icon> Lista de Usuarios</h2>
-      <button mat-stroked-button (click)="cargarUsuarios()">
-        <mat-icon>download</mat-icon> Actualizar Lista
-      </button>
-    </div>
-
-    <div class="card-grid">
-      @for (usuario of usuarios(); track usuario.id) {
-        <mat-card class="mini-card">
-          <mat-card-header class="mini-header">
-            <mat-icon mat-card-avatar color="primary">person</mat-icon>
-            <mat-card-title>{{ usuario.nombre }}</mat-card-title>
-            <mat-card-subtitle>Idioma: {{ formatLanguage(usuario.idioma) }}</mat-card-subtitle>
-          </mat-card-header>
-        </mat-card>
-      } @empty {
-        <div class="empty-state">No hay usuarios visibles.</div>
-      }
-    </div>
-  </section>
+  <app-usuarios-list
+    [usuarios]="usuarios()"
+    (refresh)="cargarUsuarios()">
+  </app-usuarios-list>
 
   <mat-divider></mat-divider>
 
-  <section class="section-block form-section">
-    <h2><mat-icon>person_add</mat-icon> Nuevo Registro</h2>
-
-    <mat-card class="form-card">
-      <mat-card-content>
-        <form (ngSubmit)="registrarUsuario()" class="registro-form">
-
-          <mat-form-field appearance="outline">
-            <mat-label>Nombre</mat-label>
-            <input matInput name="nombre" [(ngModel)]="nuevoUsuario.nombre" required>
-            <mat-icon matSuffix>badge</mat-icon>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Contraseña</mat-label>
-            <input matInput [type]="'password'" name="contrasenia" [(ngModel)]="nuevoUsuario.contrasenia" required>
-            <mat-icon matSuffix>lock</mat-icon>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Idioma</mat-label>
-            <mat-select name="idioma" [(ngModel)]="nuevoUsuario.idioma" required>
-              @for (idioma of idiomasDisponibles; track idioma) {
-                <mat-option [value]="idioma.toUpperCase()">{{idioma}}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Tipo Usuario</mat-label>
-            <mat-select name="tipoUsuario" [(ngModel)]="nuevoUsuario.tipoUsuario" required>
-              @for (tipo of tiposUsuario; track tipo) {
-                <mat-option [value]="tipo">{{tipo | titlecase}}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-
-          <div class="form-actions">
-            <button mat-flat-button color="primary" type="submit" [disabled]="!nuevoUsuario.nombre">
-              Registrar Usuario
-            </button>
-          </div>
-
-        </form>
-      </mat-card-content>
-    </mat-card>
-  </section>
+  <app-usuario-form (create)="registrarUsuarioFromChild($event)"></app-usuario-form>
 
 </div>
